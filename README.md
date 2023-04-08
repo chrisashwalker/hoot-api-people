@@ -8,4 +8,4 @@ dotnet run
 docker build -t hoot-api-people .
 
 ## Run docker image
-docker run --name hoot-api-people-container -p 5000:80 hoot-api-people 
+docker run --rm --name hoot-api-people-container -p 5000:80 hoot-api-people 
