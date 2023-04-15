@@ -4,6 +4,9 @@ dotnet new webapi -o hoot-api-people --no-https -f net7.0
 ## Execution
 dotnet run
 
+## Hot Reload
+dotnet watch
+
 ## Create docker image
 docker build -t hoot-api-people .
 
