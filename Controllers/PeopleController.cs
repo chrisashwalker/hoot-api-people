@@ -33,8 +33,7 @@ public class PeopleController : ControllerBase
     [HttpPost]
     public ActionResult<Person> CreatePerson(PersonBuilder personToCreate)
     {
-        var maxId = PeopleDataStore.Current.People
-            .Count<Person>();
+        var maxId = PeopleDataStore.Current.People.Max(p => p.Id);
 
         var newPerson = personToCreate.Build(++maxId);
 
@@ -86,4 +85,19 @@ public class PeopleController : ControllerBase
         return NoContent();
     }
     
+    [HttpDelete("{id}")]
+    public ActionResult<Person> DeletePerson(int id)
+    {
+        var person = PeopleDataStore.Current.People
+            .FirstOrDefault(p => p.Id == id);
+
+        if (person == null)
+        {
+            return NotFound();
+        }
+
+        PeopleDataStore.Current.People.Remove(person);
+
+        return NoContent();
+    }
 }
