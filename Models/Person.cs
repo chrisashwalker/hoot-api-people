@@ -7,7 +7,7 @@ public class PersonData
     [Required]
     [MaxLength(50)]
     public string FirstName { get; set; } = "";
-    
+
     [MaxLength(50)]
     public string LastName { get; set; } = "";
 }
@@ -15,8 +15,6 @@ public class PersonData
 public class Person : PersonData
 {
     public int Id { get; set; }
-
-    public string FullName => $"{FirstName} {LastName}".Trim();
 }
 
 public class PersonBuilder : PersonData 

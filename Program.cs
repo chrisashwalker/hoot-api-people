@@ -6,6 +6,7 @@ builder.Services.AddControllers(options =>
 {
     options.ReturnHttpNotAcceptable = true; // Return 406 if response not in a format accepted by client, e.g JSON, XML.
 })
+.AddNewtonsoftJson() // Required for Json PATCH.
 .AddXmlDataContractSerializerFormatters(); // Add support for XML responses.
 
 builder.Services.AddEndpointsApiExplorer();
