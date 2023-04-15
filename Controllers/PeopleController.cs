@@ -15,7 +15,7 @@ public class PeopleController : ControllerBase
         return Ok(PeopleDataStore.Current.People);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id}", Name = "GetPerson")]
     public ActionResult<Person> GetPerson(int id)
     {
         var person = PeopleDataStore.Current.People
@@ -27,6 +27,24 @@ public class PeopleController : ControllerBase
         }
 
         return Ok(person);
+    }
+
+    [HttpPost]
+    public ActionResult<Person> CreatePerson(PersonBuilder personToCreate)
+    {
+        var maxId = PeopleDataStore.Current.People
+            .Count<Person>();
+
+        var newPerson = personToCreate.Build(++maxId);
+
+        PeopleDataStore.Current.People.Add(newPerson);
+
+        return CreatedAtRoute("GetPerson", 
+            new {
+                newPerson.Id
+            },
+            newPerson
+        );
     }
     
 }

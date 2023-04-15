@@ -6,7 +6,7 @@ public class PeopleDataStore
 {
     
     public static PeopleDataStore Current { get; } = new PeopleDataStore();
-    public IEnumerable<Person> People { get; set; }
+    public ICollection<Person> People { get; set; }
 
     public PeopleDataStore()
     {
@@ -15,7 +15,7 @@ public class PeopleDataStore
             Id = index,
             FirstName = $"Person{index}"
         })
-        .ToArray();
+        .ToList();
     }
 
 }
