@@ -7,8 +7,11 @@ dotnet run
 ## Hot Reload
 dotnet watch
 
+# Build
+dotnet build
+
 ## Create docker image
 docker build -t hoot-api-people .
 
 ## Run docker image
-docker run --rm --name hoot-api-people-container -p 5000:80 hoot-api-people 
+docker run --rm --name hoot-api-people-container -p 8001:8001 hoot-api-people 
