@@ -13,5 +13,5 @@ dotnet build
 ## Create docker image
 docker build -t hoot-api-people .
 
-## Run docker image
-docker run --rm --name hoot-api-people-container -p 8001:8001 hoot-api-people 
+## Create and run docker container
+docker run --name hoot-api-people-container -p 8001:8001 hoot-api-people 
