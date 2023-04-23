@@ -1,5 +1,6 @@
 # Hoot People API
-The people management service for [Hoot](https://github.com/chrisashwalker/hoot) - a tiny Human Resources management system built upon microservices. 
+The people management service for [Hoot](https://github.com/chrisashwalker/hoot) - a tiny Human Resources management system built upon microservices.  
+Developed with C# .NET 7.
 
 ## Run
 ```
