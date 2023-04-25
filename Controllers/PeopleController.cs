@@ -97,6 +97,7 @@ public class PeopleController : ControllerBase
         }
 
         PeopleDataStore.Current.People.Remove(person);
+        MessageService.PostDeletionMessage("person", person.Id);
 
         return NoContent();
     }
