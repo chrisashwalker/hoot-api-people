@@ -1,3 +1,6 @@
+using hoot_api_people.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -11,6 +14,7 @@ builder.Services.AddControllers(options =>
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddDbContext<PeopleContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("HootDbPostgres")));
 
 var app = builder.Build();
 
@@ -25,5 +29,10 @@ if (app.Environment.IsDevelopment())
 app.UseAuthorization();
 
 app.MapControllers();
+
+var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+var context = services.GetRequiredService<PeopleContext>();
+PeopleInitialiser.Initialise(context);
 
 app.Run();

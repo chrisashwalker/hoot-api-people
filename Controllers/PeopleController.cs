@@ -10,16 +10,23 @@ namespace hoot_api_people.Controllers;
 public class PeopleController : ControllerBase
 {
 
+    private readonly PeopleContext _context;
+
+    public PeopleController(PeopleContext context)
+    {
+        _context = context;
+    }
+
     [HttpGet]
     public ActionResult<IEnumerable<Person>> GetPeople()
     {
-        return Ok(PeopleDataStore.Current.People);
+        return Ok(_context.People.ToList());
     }
 
     [HttpGet("{id}", Name = "GetPerson")]
     public ActionResult<Person> GetPerson(int id)
     {
-        var person = PeopleDataStore.Current.People
+        var person = _context.People
             .FirstOrDefault(p => p.Id == id);
 
         if (person == null)
@@ -33,11 +40,12 @@ public class PeopleController : ControllerBase
     [HttpPost]
     public ActionResult<Person> CreatePerson(PersonBuilder personToCreate)
     {
-        var maxId = PeopleDataStore.Current.People.Max(p => p.Id);
+        var maxId = _context.People.Max(p => p.Id);
 
         var newPerson = personToCreate.Build(++maxId);
 
-        PeopleDataStore.Current.People.Add(newPerson);
+        _context.People.Add(newPerson);
+        _context.SaveChanges();
 
         return CreatedAtRoute("GetPerson", 
             new {
@@ -50,7 +58,7 @@ public class PeopleController : ControllerBase
     [HttpPut]
     public ActionResult ReplacePerson(Person replacement)
     {
-        var person = PeopleDataStore.Current.People
+        var person = _context.People
             .FirstOrDefault(p => p.Id == replacement.Id);
 
         if (person == null)
@@ -60,6 +68,7 @@ public class PeopleController : ControllerBase
 
         person.FirstName = replacement.FirstName;
         person.LastName = replacement.LastName;
+        _context.SaveChanges();
 
         return NoContent();
     }
@@ -67,7 +76,7 @@ public class PeopleController : ControllerBase
     [HttpPatch("{id}")]
     public ActionResult UpdatePerson(int id, [FromBody] JsonPatchDocument<PersonData> patchDocument)
     {
-        var person = PeopleDataStore.Current.People
+        var person = _context.People
             .FirstOrDefault(p => p.Id == id);
 
         if (person == null)
@@ -76,6 +85,7 @@ public class PeopleController : ControllerBase
         }
 
         patchDocument.ApplyTo(person, ModelState);
+        _context.SaveChanges();
         
         if (!ModelState.IsValid)
         {
@@ -88,7 +98,7 @@ public class PeopleController : ControllerBase
     [HttpDelete("{id}")]
     public ActionResult<Person> DeletePerson(int id)
     {
-        var person = PeopleDataStore.Current.People
+        var person = _context.People
             .FirstOrDefault(p => p.Id == id);
 
         if (person == null)
@@ -96,7 +106,8 @@ public class PeopleController : ControllerBase
             return NotFound();
         }
 
-        PeopleDataStore.Current.People.Remove(person);
+        _context.People.Remove(person);
+        _context.SaveChanges();
         MessageService.PostDeletionMessage("person", person.Id);
 
         return NoContent();
