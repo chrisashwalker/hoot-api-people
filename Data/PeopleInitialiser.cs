@@ -1,5 +1,4 @@
 using hoot_api_people.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace hoot_api_people.Data;
 

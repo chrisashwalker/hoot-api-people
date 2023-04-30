@@ -9,16 +9,18 @@ public static class MessageService
 
     static MessageService()
     {
+        // Connect to deleted object message queue
         var factory = new ConnectionFactory { HostName = "hoot-message-queues" };
         MessageService.connection = factory.CreateConnection();
         MessageService.channel = MessageService.connection.CreateModel();
         MessageService.channel.QueueDeclare(queue: "deleted-objects",
-                            durable: true,
-                            exclusive: false,
-                            autoDelete: false,
-                            arguments: null);
+                                            durable: true,
+                                            exclusive: false,
+                                            autoDelete: false,
+                                            arguments: null);
     }
 
+    // Called when objects are deleted so that subscribers can process as required
     public static void PostDeletionMessage(string type, long objId)
     {
         byte[] body = System.Text.Encoding.UTF8.GetBytes(new MessageBody(type, objId).ToString());
